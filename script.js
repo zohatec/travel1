@@ -1,29 +1,75 @@
 /* ============================================================
-   Padma Travels — script.js (Nationwide + International)
-   Sticky nav, mobile menu, BN/EN toggle, scroll-to-top,
-   reveal animations, Formspree form handling.
+   Padma Travels — script.js
+   Fixed: mobile hamburger menu (visible + working),
+   close on outside click, aria-expanded state,
+   language toggle, sticky nav, reveal animations, form handling.
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-  /* ---------- 1. MOBILE MENU ---------- */
+  /* ---------- 1. MOBILE HAMBURGER MENU ---------- */
   const hamburger = document.getElementById("hamburger");
   const navLinks = document.getElementById("navLinks");
+  const body = document.body;
 
-  if (hamburger) {
-    hamburger.addEventListener("click", () => {
-      navLinks.classList.toggle("open");
+  const openMenu = () => {
+    navLinks.classList.add("open");
+    body.classList.add("menu-open");
+    hamburger.setAttribute("aria-expanded", "true");
+  };
+
+  const closeMenu = () => {
+    navLinks.classList.remove("open");
+    body.classList.remove("menu-open");
+    hamburger.setAttribute("aria-expanded", "false");
+  };
+
+  const toggleMenu = () => {
+    if (navLinks.classList.contains("open")) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  };
+
+  if (hamburger && navLinks) {
+    // Click / tap on hamburger (works on touch + mouse)
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // Close when any menu link is clicked
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => closeMenu());
+    });
+
+    // Close when clicking outside the menu (but not on hamburger)
+    document.addEventListener("click", (e) => {
+      if (!navLinks.classList.contains("open")) return;
+      if (navLinks.contains(e.target)) return;
+      if (hamburger.contains(e.target)) return;
+      closeMenu();
+    });
+
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navLinks.classList.contains("open")) {
+        closeMenu();
+      }
+    });
+
+    // Auto-close if window resized to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 860 && navLinks.classList.contains("open")) {
+        closeMenu();
+      }
     });
   }
-
-  navLinks?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => navLinks.classList.remove("open"));
-  });
 
   /* ---------- 2. LANGUAGE TOGGLE (BN / EN) ---------- */
   const langToggle = document.getElementById("langToggle");
   const langLabel = document.getElementById("langLabel");
   const htmlRoot = document.getElementById("htmlRoot");
-  const body = document.body;
 
   const setLanguage = (lang) => {
     const isEN = lang === "en";
@@ -91,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
     );
-
     revealElements.forEach((el) => observer.observe(el));
   } else {
     revealElements.forEach((el) => el.classList.add("active"));
