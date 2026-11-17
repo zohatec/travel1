@@ -1,7 +1,7 @@
 /* ============================================================
-   Padma Travels — script.js
-   Features: Sticky nav, mobile menu, language toggle,
-   scroll-to-top, reveal animations, Formspree form handling.
+   Padma Travels — script.js (Nationwide + International)
+   Sticky nav, mobile menu, BN/EN toggle, scroll-to-top,
+   reveal animations, Formspree form handling.
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Close menu when a link is clicked
   navLinks?.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => navLinks.classList.remove("open"));
   });
@@ -32,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     htmlRoot.setAttribute("lang", isEN ? "en" : "bn");
     langLabel.textContent = isEN ? "বাংলা" : "EN";
 
-    // Swap all elements with data-bn / data-en
     document.querySelectorAll("[data-bn][data-en]").forEach((el) => {
       el.textContent = isEN ? el.dataset.en : el.dataset.bn;
     });
@@ -40,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("padma-lang", lang);
   };
 
-  // Load saved language
   const savedLang = localStorage.getItem("padma-lang") || "bn";
   setLanguage(savedLang);
 
@@ -49,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setLanguage(current === "bn" ? "en" : "bn");
   });
 
-  /* ---------- 3. STICKY NAV SHADOW ON SCROLL ---------- */
+  /* ---------- 3. STICKY NAV SHADOW ---------- */
   const navbar = document.getElementById("navbar");
   window.addEventListener("scroll", () => {
     if (window.scrollY > 20) {
@@ -59,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------- 4. SCROLL-TO-TOP BUTTON ---------- */
+  /* ---------- 4. SCROLL-TO-TOP ---------- */
   const scrollTopBtn = document.getElementById("scrollTopBtn");
   const hero = document.getElementById("hero");
 
@@ -73,13 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   window.addEventListener("scroll", toggleScrollTop);
-  toggleScrollTop(); // initial check
+  toggleScrollTop();
 
   scrollTopBtn?.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  /* ---------- 5. SCROLL REVEAL ANIMATION (Intersection Observer) ---------- */
+  /* ---------- 5. SCROLL REVEAL ---------- */
   const revealElements = document.querySelectorAll(".reveal");
 
   if ("IntersectionObserver" in window) {
@@ -88,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("active");
-            observer.unobserve(entry.target); // reveal once
+            observer.unobserve(entry.target);
           }
         });
       },
@@ -97,11 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     revealElements.forEach((el) => observer.observe(el));
   } else {
-    // Fallback for old browsers
     revealElements.forEach((el) => el.classList.add("active"));
   }
 
-  /* ---------- 6. FORM SUBMISSION via Formspree (Free Data Storage) ---------- */
+  /* ---------- 6. FORM SUBMISSION via Formspree ---------- */
   const form = document.getElementById("bookingForm");
   const formStatus = document.getElementById("formStatus");
   const submitBtn = document.getElementById("submitBtn");
@@ -110,17 +106,16 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Basic client-side validation
       const name = form.querySelector("#name").value.trim();
       const email = form.querySelector("#email").value.trim();
 
       if (!name || !email) {
-        formStatus.textContent = "অনুগ্রহ করে নাম ও ইমেইল দিন। / Please provide name & email.";
+        formStatus.textContent =
+          "অনুগ্রহ করে নাম ও ইমেইল দিন। / Please provide name & email.";
         formStatus.className = "form-status error";
         return;
       }
 
-      // UI: loading state
       submitBtn.disabled = true;
       const originalText = submitBtn.textContent;
       submitBtn.textContent = "পাঠানো হচ্ছে... / Sending...";
@@ -154,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- 7. SMOOTH SCROLL FOR OLD BROWSERS (fallback) ---------- */
+  /* ---------- 7. SMOOTH SCROLL WITH NAV OFFSET ---------- */
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
       const targetId = this.getAttribute("href");
