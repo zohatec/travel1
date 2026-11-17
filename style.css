@@ -159,7 +159,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 16px;
+  padding: 14px 0;
 }
 
 .logo {
@@ -754,11 +754,11 @@ ul {
 }
 
 /* ========== RESPONSIVE ========== */
-}
 @media (max-width: 860px) {
   .contact-grid {
     grid-template-columns: 1fr;
   }
+
   .nav-links {
     position: fixed;
     top: 64px;
