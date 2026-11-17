@@ -754,11 +754,14 @@ ul {
 }
 
 /* ========== RESPONSIVE ========== */
+}
 @media (max-width: 860px) {
   .contact-grid {
     grid-template-columns: 1fr;
   }
-
+  .nav-container {
+    padding: 14px 16px;
+  }
   .nav-links {
     position: fixed;
     top: 64px;
